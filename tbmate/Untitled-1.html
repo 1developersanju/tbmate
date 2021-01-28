@@ -1,0 +1,219 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/fulltilt/dist/fulltilt.min.js"></script>
+<script src="lib/gyronorm.js"></script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+</style>
+<style>
+body, html {
+  height: 100%;
+  margin: 0;
+  /*font: 400 15px/1.8 "Lato", sans-serif;*/
+  color: #777;
+  background-color:black;
+  font-family: 'Roboto', sans-serif;
+
+}
+
+.bgimg-1, .bgimg-2, .bgimg-3 {
+  position: relative;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+
+}
+
+.bgimg-1 {
+  background-image: url("img_parallax.jpg");
+  height: 100%;
+}
+
+.caption {
+  position: absolute;
+  left: 0;
+  top: 25%;
+  width: 100%;
+  text-align: center;
+  color: #000;
+}
+
+.caption span.border {
+  /*background-color: #111;*/
+  color: #5f5c5c;
+  padding: 15px;
+  font-size: 20px;
+  /*letter-spacing: 10px;*/
+}
+
+h3 {
+  letter-spacing: 5px;
+  text-transform: uppercase;
+  font: 20px "Lato", sans-serif;
+  color: #111;
+}
+
+
+
+</style>
+</head>
+<body onload="init_gn()">
+
+<div class="bgimg-1" id="showmsg">
+  <div class="caption">
+<p>
+        <img src="images/tilt.png" style="opacity:0.8;padding:35px;" >
+    </p>
+
+    <span class="border">Slowly tilt & pan your phone to search the sound of Kuala Lumpur.</span>
+    <p><span class="border" style="color:#607690">Guess the location by listening to it.</span></p>
+    <p><span class="border" style="color:#607690" id="acvalues">-- -- -- </span></p>
+    <p><span class="border" style="color:#607690" id="error-message">Guess the location by listening to it.</span></p>
+    
+  </div>
+</div>
+
+
+<script type="text/javascript">
+// var conn = new WebSocket('wss://localhost:8080');
+var ip = "58.84.42.40";  
+var conString = "uU3D2ZByo8g9";
+console.log('id = '+conString);
+//var conn = new WebSocket('wss://'+ip+':8080');
+var conn = new WebSocket('wss://tbmatekl.com/wss2/NNN');
+
+conn.onopen = function(e) {
+  console.log("Connection established!");
+  subscribe(conString);
+};
+
+setInterval(myMethod, 1000);
+
+function myMethod()
+{
+  var rand = Math.floor(Math.random() * 1000);
+  sendMessage(''+rand);
+}
+
+var i = 0;
+conn.onmessage = function(e){
+  console.log('received message :'+e.data);
+  var msg = JSON.parse(e.data);
+  if(msg.connection_key != null){
+    console.log(msg.connection_key);
+  }else{
+    if(i>0){
+     console.log('updating mouse pointer now..');
+     //sendMessage('lr');
+    }else{
+      document.getElementById('showmsg').remove();
+      i = i +1;
+    }
+  }
+}
+
+function subscribe(channel) {
+	console.log('subscribing to '+conString);
+    conn.send(JSON.stringify({command: "subscribe", channel: channel}));
+}
+
+function sendMessage(msg) {
+	console.log('sending message '+Date());
+    conn.send(JSON.stringify({command: "message", message: msg}));
+}
+
+</script>
+
+<script type="text/javascript">
+    var gn;
+
+    function init_gn() {
+      var args = {
+        logger: logger
+      };
+
+      gn = new GyroNorm();
+
+      gn.init(args).then(function() {
+        var isAvailable = gn.isAvailable();
+        if(!isAvailable.deviceOrientationAvailable) {
+          logger({message:'Device orientation is not available.'});
+        }
+
+        if(!isAvailable.accelerationAvailable) {
+          logger({message:'Device acceleration is not available.'});
+        }
+
+        if(!isAvailable.accelerationIncludingGravityAvailable) {
+          logger({message:'Device acceleration incl. gravity is not available.'});
+        } 
+
+        if(!isAvailable.rotationRateAvailable) {
+          logger({message:'Device rotation rate is not available.'});
+        }
+
+        start_gn();
+      }).catch(function(e){
+
+        console.log(e);
+        
+      });
+    }
+
+    function logger(data) {
+      $('#error-message').append(data.message + "\n");
+    }
+
+    function stop_gn() {
+      gn.stop();
+    }
+
+    function start_gn() {
+      gn.start(gnCallBack);
+    }
+
+    function gnCallBack(data) {
+      $('#acvalues').html(data.dm.x + ' ' + data.dm.y);
+      // var dat = { "x": data.dm.gx, "y": data.dm.gy};
+      // var gyroJSON = JSON.stringify(dat);
+      sendMessage(""+data.dm.gx+","+data.dm.gy+"");
+    }
+    
+
+    function norm_gn() {
+      gn.normalizeGravity(true);
+    }
+
+    function org_gn() {
+      gn.normalizeGravity(false);
+    }
+
+    function set_head_gn() {
+      gn.setHeadDirection();
+    }
+
+    function showDO() {
+      $('#do').show();
+      $('#dm').hide();
+      $('#btn-dm').removeClass('selected');
+      $('#btn-do').addClass('selected');
+    }
+
+    function showDM() {
+      $('#dm').show();
+      $('#do').hide();
+      $('#btn-do').removeClass('selected');
+      $('#btn-dm').addClass('selected');
+    }
+  </script>
+
+
+</body>
+</html>
