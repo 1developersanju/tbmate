@@ -51,6 +51,8 @@ class _MyHomePageState extends State<MyHomePage> {
       // x = x - 5.5;
       // y = y + 3.8;
       // print('$x  $y');
+      for (var i = 3000; i > 0; i--) {}
+    
       widget.channel.sink.add(
           '{"command": "message", "message": "${x.toStringAsFixed(1)},${y.toStringAsFixed(1)}"}');
     });

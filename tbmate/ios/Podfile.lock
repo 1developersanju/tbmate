@@ -1,4 +1,6 @@
 PODS:
+  - aeyrium_sensor (1.0.0):
+    - Flutter
   - barcode_scan (0.0.1):
     - Flutter
     - MTBBarcodeScanner
@@ -12,20 +14,26 @@ PODS:
     - Flutter
   - path_provider_windows (0.0.1):
     - Flutter
+  - sensors (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
+  - aeyrium_sensor (from `.symlinks/plugins/aeyrium_sensor/ios`)
   - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
   - Flutter (from `Flutter`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
   - path_provider_linux (from `.symlinks/plugins/path_provider_linux/ios`)
   - path_provider_macos (from `.symlinks/plugins/path_provider_macos/ios`)
   - path_provider_windows (from `.symlinks/plugins/path_provider_windows/ios`)
+  - sensors (from `.symlinks/plugins/sensors/ios`)
 
 SPEC REPOS:
   trunk:
     - MTBBarcodeScanner
 
 EXTERNAL SOURCES:
+  aeyrium_sensor:
+    :path: ".symlinks/plugins/aeyrium_sensor/ios"
   barcode_scan:
     :path: ".symlinks/plugins/barcode_scan/ios"
   Flutter:
@@ -38,8 +46,11 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/path_provider_macos/ios"
   path_provider_windows:
     :path: ".symlinks/plugins/path_provider_windows/ios"
+  sensors:
+    :path: ".symlinks/plugins/sensors/ios"
 
 SPEC CHECKSUMS:
+  aeyrium_sensor: cdaa0bdd7206824ea4fb910c627cad05275362e5
   barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
@@ -47,7 +58,8 @@ SPEC CHECKSUMS:
   path_provider_linux: 4d630dc393e1f20364f3e3b4a2ff41d9674a84e4
   path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
   path_provider_windows: a2b81600c677ac1959367280991971cb9a1edb3b
+  sensors: 84eb7a30e47a649e4172b71d6e81be614c280336
 
 PODFILE CHECKSUM: c34e2287a9ccaa606aeceab922830efb9a6ff69a
 
-COCOAPODS: 1.9.1
+COCOAPODS: 1.10.0
